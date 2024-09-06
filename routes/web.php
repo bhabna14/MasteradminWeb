@@ -147,7 +147,7 @@ Route::controller(userController::class)->group(function() {
     Route::post('store', 'store')->name('store');
 
     Route::get('/', 'userlogin')->name('userlogin');
-    Route::post('user/authenticate', 'userauthenticate')->name('userauthenticate');
+    Route::post('user/authenticate', 'userauthenticate')->name('user.authenticate');
     Route::post('user/logout', 'userlogout')->name('userlogout');
 
 });
@@ -193,38 +193,42 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     
     });
     
-            Route::get('/sebayatregister', [sebayatregisterController::class, 'sebayatregister']);
-            Route::post('/saveregister', [sebayatregisterController::class, 'saveregister'])->name('saveregister');
-            Route::put('/reject/{id}', [sebayatregisterController::class, 'reject'])->name('reject');
-            Route::put('/approve/{id}', [sebayatregisterController::class, 'approve'])->name('approve');
-            Route::get('/sebayatlist', [sebayatregisterController::class, 'sebayatlist'])->name('sebayatlist');
-            Route::get('/editsebayat/{userid}', [sebayatregisterController::class, 'editsebayat'])->name('editsebayat');
+    Route::controller(sebayatregisterController::class)->group(function () {
+        Route::get('/sebayatregister', 'sebayatregister');
+        Route::post('/saveregister', 'saveregister')->name('saveregister');
     
-            Route::get('/viewsebayat/{userid}', [sebayatregisterController::class, 'viewsebayat'])->name('viewsebayat');
-            Route::get('/dltsebayat/{userid}', [sebayatregisterController::class, 'dltsebayat'])->name('dltsebayat');
+        Route::put('/reject/{user_id}', 'reject')->name('admin.reject');
+        Route::put('/approve/{user_id}', 'approve')->name('admin.accept');
+    // In web.php (routes file)
+    Route::post('/add-death-date/{user_id}', 'addDeathDate')->name('admin.addDeathDate');
+
+        Route::get('/sebayatlist', 'sebayatlist')->name('sebayatlist');
+        Route::get('/editsebayat/{user_id}', 'editsebayat')->name('editsebayat');
     
-            // Route::put('/updateuserinfo/{id}', [sebayatregisterController::class, 'updateuserinfo']);
-            Route::put('/childupdate/{id}', [sebayatregisterController::class, 'childupdate']);
+        Route::get('/viewsebayat/{user_id}', 'viewsebayat')->name('admin.viewsebayat');
+        Route::get('/dltsebayat/{user_id}', 'dltsebayat')->name('dltsebayat');
     
-            Route::put('/updateuserinfo/{userid}', [sebayatregisterController::class, 'updateuserinfo'])->name('updateUserInfo');
-            Route::put('/updatefamilyinfo/{userid}', [sebayatregisterController::class, 'updateFamilyInfo'])->name('updateFamilyInfo');
-            Route::post('/updatechildInfo', [sebayatregisterController::class, 'updateChildInfo'])->name('updateChildInfo');
-           
-            Route::get('/updatechildstatus/{userid}', [sebayatregisterController::class, 'updatechildstatus'])->name('updatechildstatus');
-
-            Route::put('/updateidinfo/{userid}', [sebayatregisterController::class, 'updateIdInfo'])->name('updateIdInfo');
-
-            Route::get('/updateIdstatus/{userid}', [sebayatregisterController::class, 'updateIdstatus'])->name('updateIdstatus');
+        // Route::put('/childupdate/{id}', 'childupdate');
     
-            Route::put('/updateAddressInfo/{userid}', [sebayatregisterController::class, 'updateAddressInfo'])->name('updateAddressInfo');
-            Route::put('/updateBankInfo/{userid}', [sebayatregisterController::class, 'updateBankInfo'])->name('updateBankInfo');
-
-            Route::put('/updatenewAddress', [sebayatregisterController::class, 'updatenewAddress'])->name('updatenewAddress');
-            Route::put('/updatenewBankInfo', [sebayatregisterController::class, 'updatenewBankInfo'])->name('updatenewBankInfo');
-
-            Route::put('/updateotherInfo/{userid}', [sebayatregisterController::class, 'updateotherInfo'])->name('updateOtherInfo');
-
-
+        // Route::put('/updateuserinfo/{userid}', 'updateuserinfo')->name('updateUserInfo');
+        // // Route::put('/updatefamilyinfo/{userid}', 'updateFamilyInfo')->name('updateFamilyInfo');
+        // Route::put('/update-family-info/{user_id}', 'updateFamilyInfo')->name('updateFamilyInfo');
+        // Route::post('/updatechildInfo', 'updateChildInfo')->name('updateChildInfo');
+    
+        // Route::get('/updatechildstatus/{userid}', 'updatechildstatus')->name('updatechildstatus');
+        // // Route::put('/updateidinfo', 'updateIdInfo')->name('updateIdInfo');
+        // Route::put('updateIdInfo', 'updateIdInfo')->name('updateIdInfo');
+        // Route::get('/updateIdstatus/{userid}', 'updateIdstatus')->name('updateIdstatus');
+    
+        // Route::put('/updateAddressInfo/{userid}', 'updateAddressInfo')->name('updateAddressInfo');
+        // Route::put('/updateBankInfo/{userid}', 'updateBankInfo')->name('updateBankInfo');
+    
+        // Route::put('/updatenewAddress', 'updatenewAddress')->name('updatenewAddress');
+        // Route::put('/updatenewBankInfo', 'updatenewBankInfo')->name('updatenewBankInfo');
+    
+        // Route::put('/updateotherInfo/{userid}', 'updateotherInfo')->name('updateOtherInfo');
+    });
+    
 });
 
 
@@ -244,142 +248,24 @@ Route::prefix('user')->middleware(['user'])->group(function () {
 
         
     });
-    Route::put('/updateuserinfo/{userid}', [userController::class, 'updateuserinfo'])->name('updateUserInfo');
-    Route::put('/updatefamilyinfo/{userid}', [userController::class, 'updateFamilyInfo'])->name('updateFamilyInfo');
-    Route::post('/updatechildInfo', [userController::class, 'updateChildInfo'])->name('updateChildInfo');
+    Route::put('/updateuserinfo/{user_id}', [UserController::class, 'updateuserinfo'])->name('user.updateUserInfo');
+   
+    Route::put('/update-family-info/{user_id}', [userController::class, 'updateFamilyInfo'])->name('user.updateFamilyInfo');
+    Route::post('/updatechildInfo', [userController::class, 'updateChildInfo'])->name('user.updateChildInfo');
            
-    Route::get('/updatechildstatus/{userid}', [userController::class, 'updatechildstatus'])->name('updatechildstatus');
+    Route::delete('/updatechildstatus/{id}', [UserController::class, 'updateChildStatus'])->name('user.updateChildStatus');
 
-    Route::put('/updateidinfo/{userid}', [userController::class, 'updateIdInfo'])->name('updateIdInfo');
 
-    Route::get('/updateIdstatus/{userid}', [userController::class, 'updateIdstatus'])->name('updateIdstatus');
+    Route::put('/updateidinfo', [userController::class, 'updateIdInfo'])->name('user.updateIdInfo');
+
+    Route::delete('/updateIdstatus/{id}', [userController::class, 'updateIdstatus'])->name('user.updateIdstatus');
     
-    Route::put('/updateAddressInfo/{userid}', [userController::class, 'updateAddressInfo'])->name('updateAddressInfo');
-    Route::put('/updateBankInfo/{userid}', [userController::class, 'updateBankInfo'])->name('updateBankInfo');
+    Route::put('/updateAddressInfo/{user_id}', [userController::class, 'updateAddressInfo'])->name('user.updateAddressInfo');
+    Route::put('/updateBankInfo/{user_id}', [userController::class, 'updateBankInfo'])->name('user.updateBankInfo');
 
-    Route::put('/updatenewAddress', [userController::class, 'updatenewAddress'])->name('updatenewAddress');
-    Route::put('/updatenewBankInfo', [userController::class, 'updatenewBankInfo'])->name('updatenewBankInfo');
-
-    Route::put('/updateotherInfo/{userid}', [userController::class, 'updateotherInfo'])->name('updateOtherInfo');
+    Route::put('/updateSocial/{user_id}', [userController::class, 'updateSocialMedia'])->name('user.updateSocialMedia');
+   
+    Route::post('/updateotherInfo', [userController::class, 'updateotherInfo'])->name('user.updateOtherInfo');
+    Route::delete('/updateSebaStatus/{id}', [userController::class, 'updateSebaStatus'])->name('user.updateSebaStatus');
 
 });
-
-Route::get('aboutus', Aboutus::class);
-Route::get('accordion', Accordion::class);
-Route::get('alerts', Alerts::class);
-Route::get('avatar', Avatar::class);
-Route::get('background', Background::class);
-Route::get('badge', Badge::class);
-Route::get('blog-details', BlogDetails::class);
-Route::get('blog', Blog::class);
-Route::get('border', Border::class);
-Route::get('breadcrumbs', Breadcrumbs::class);
-Route::get('buttons', Buttons::class);
-Route::get('calendar', Calendar::class);
-Route::get('cards', Cards::class);
-Route::get('carousel', Carousel::class);
-Route::get('chart-chartjs', ChartChartjs::class);
-Route::get('chart-echart', ChartEchart::class);
-Route::get('chart-flot', ChartFlot::class);
-Route::get('chart-morris', ChartMorris::class);
-Route::get('chart-peity', ChartPeity::class);
-Route::get('chart-sparkline', ChartSparkline::class);
-Route::get('chat', Chat::class);
-Route::get('check-out', CheckOut::class);
-Route::get('collapse', Collapse::class);
-Route::get('contacts', Contacts::class);
-Route::get('counters', Counters::class);
-Route::get('draggablecards', Draggablecards::class);
-Route::get('display', Display::class);
-Route::get('dropdown', Dropdown::class);
-Route::get('edit-post', EditPost::class);
-Route::get('emptypage', Emptypage::class);
-Route::get('error404', Error404::class);
-Route::get('error500', Error500::class);
-Route::get('error501', Error501::class);
-Route::get('extras', Extras::class);
-Route::get('faq', Faq::class);
-Route::get('file-attached-tags', FileAttachedTags::class);
-Route::get('file-details', FileDetails::class);
-Route::get('file-manager', FileManager::class);
-Route::get('file-manager1', FileManager1::class);
-Route::get('flex', Flex::class);
-Route::get('forgot', Forgot::class);
-Route::get('form-advanced', FormAdvanced::class);
-Route::get('form-editor', FormEditor::class);
-Route::get('form-elements', FormElements::class);
-Route::get('form-layouts', FormLayouts::class);
-Route::get('form-sizes', FormSizes::class);
-Route::get('form-validation', FormValidation::class);
-Route::get('form-wizards', FormWizards::class);
-Route::get('gallery', Gallery::class);
-Route::get('height', Height::class);
-Route::get('icons', Icons::class);
-Route::get('icons2', Icons2::class);
-Route::get('icons3', Icons3::class);
-Route::get('icons4', Icons4::class);
-Route::get('icons5', Icons5::class);
-Route::get('icons6', Icons6::class);
-Route::get('icons7', Icons7::class);
-Route::get('icons8', Icons8::class);
-Route::get('icons9', Icons9::class);
-Route::get('icons10', Icons10::class);
-Route::get('icons11', Icons11::class);
-Route::get('icons12', Icons12::class);
-Route::get('image-compare', ImageCompare::class);
-Route::get('images', Images::class);
-// Route::get('index', Index::class);
-Route::get('index1', Index1::class);
-Route::get('index2', Index2::class);
-Route::get('invoice', Invoice::class);
-Route::get('list-group', ListGroup::class);
-Route::get('lockscreen', Lockscreen::class);
-Route::get('mail-compose', MailCompose::class);
-Route::get('mail-read', MailRead::class);
-Route::get('mail-settings', MailSettings::class);
-Route::get('mail', Mail::class);
-Route::get('map-leaflet', MapLeaflet::class);
-Route::get('map-vector', MapVector::class);
-Route::get('margin', Margin::class);
-Route::get('media-object', MediaObject::class);
-Route::get('modals', Modals::class);
-Route::get('navigation', Navigation::class);
-Route::get('notification', Notification::class);
-Route::get('padding', Padding::class);
-Route::get('pagination', Pagination::class);
-Route::get('popover', Popover::class);
-Route::get('position', Position::class);
-Route::get('pricing', Pricing::class);
-Route::get('product-cart', ProductCart::class);
-Route::get('product-details', ProductDetails::class);
-Route::get('profile-notifications', ProfileNotifications::class);
-Route::get('profile', Profile::class);
-Route::get('progress', Progress::class);
-Route::get('rangeslider', Rangeslider::class);
-Route::get('rating', Rating::class);
-Route::get('reset', Reset::class);
-Route::get('search', Search::class);
-Route::get('settings', Settings::class);
-Route::get('shop', Shop::class);
-// Route::get('signin', Signin::class);
-// Route::get('signup', Signup::class);
-Route::get('spinners', Spinners::class);
-Route::get('sweet-alert', SweetAlert::class);
-Route::get('switcherpage', Switcherpage::class);
-Route::get('table-basic', TableBasic::class);
-Route::get('table-data', TableData::class);
-Route::get('tabs', Tabs::class);
-Route::get('tags', Tags::class);
-Route::get('thumbnails', Thumbnails::class);
-Route::get('timeline', Timeline::class);
-Route::get('toast', Toast::class);
-Route::get('todotask', Todotask::class);
-Route::get('tooltip', Tooltip::class);
-Route::get('treeview', Treeview::class);
-Route::get('typography', Typography::class);
-Route::get('underconstruction', Underconstruction::class);
-Route::get('userlist', Userlist::class);
-Route::get('widget-notification', WidgetNotification::class);
-Route::get('widgets', Widgets::class);
-Route::get('width', Width::class);
-Route::get('wish-list', WishList::class);

@@ -9,4 +9,21 @@ class Addressdetail extends Model
 {
     use HasFactory;
     protected $table = 'addressdetails';
+    protected $fillable = [
+        'user_id',
+        'preaddress',
+        'prepost',
+        'predistrict',
+        'prestate',
+        'precountry',
+        'prepincode',
+        'prelandmark',
+        'peraddress',
+        'perpost',
+        'perdistri',
+        'perstate',
+        'percountry',
+        'perpincode',
+        'perlandmark',
+    ];
 }

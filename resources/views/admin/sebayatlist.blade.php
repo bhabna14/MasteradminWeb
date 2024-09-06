@@ -51,10 +51,10 @@
 
                                                     <th class="border-bottom-0">Name</th>
                                                     <th class="border-bottom-0">Registered Date</th>
-                                                    <th class="border-bottom-0">Approved Date</th>
+                                                    {{-- <th class="border-bottom-0">Approved Date</th> --}}
                                                     <th class="border-bottom-0">Added By</th>
                                                     <th class="border-bottom-0">Application Status</th>
-                                                    
+                                                    <th class="border-bottom-0">Status</th>
                                                     <th class="border-bottom-0">Action</th>
                                                 </tr>
                                             </thead>
@@ -74,7 +74,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="media-text">
-                                                                <a href="{{url('admin/viewsebayat/'.$sebayatlist->userid)}}" class="title">{{ $sebayatlist->first_name}} {{ $sebayatlist->last_name }}</a>
+                                                                <a href="{{url('admin/viewsebayat/'.$sebayatlist->user_id)}}" class="title">{{ $sebayatlist->first_name}} {{ $sebayatlist->last_name }}</a>
                                                                 <span class="small text">{{ $sebayatlist->email }}</span>
                                                             </div>
                                                         </div>
@@ -82,7 +82,7 @@
                                                     </a>
                                                     
                                                    <td>{{ $sebayatlist->created_at }}</td>
-                                                   <td>{{ $sebayatlist->approved_date =="" ? "N/A" :  date_format($sebayatlist->approved_date,"j F Y")}}</td>
+                                                   {{-- <td>{{ $sebayatlist->approved_date =="" ? "N/A" :  date_format($sebayatlist->approved_date,"j F Y")}}</td> --}}
                                                    <td>{{  $sebayatlist->added_by }}</td>
                                                     <td>
                                                         @if($sebayatlist->application_status == 'rejected')
@@ -93,11 +93,39 @@
                                                             <span class="badge badge-success">{{ $sebayatlist->application_status }}</span> 
                                                         @endif
                                                     </td>
+                                                   <td>{{$sebayatlist->status}}</td>
                                                     
                                                     <td>
-                                                        <a href="{{url('admin/viewsebayat/'.$sebayatlist->userid)}}"><i class="fas fa-eye"></i></a> | 
-                                                        <a href="{{url('admin/editsebayat/'.$sebayatlist->userid)}}"><i class="fa fa-edit"></i></a> | 
-                                                        <a href="{{url('admin/dltsebayat/'.$sebayatlist->userid)}}" onClick="return confirm('Are you sure to delete ?');"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                                        @if($sebayatlist->application_status == 'approved')
+                                                            <form action="{{ route('admin.reject',['user_id' => urlencode($sebayatlist->user_id)]) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT') <!-- Specify the method as PUT -->
+                                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                                            </form>
+                                                        @elseif($sebayatlist->application_status == 'rejected')
+                                                            <form action="{{ route('admin.accept',['user_id' => urlencode($sebayatlist->user_id)]) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT') <!-- Specify the method as PUT -->
+                                                                <button type="submit" class="btn btn-success">Accept</button>
+                                                            </form>
+                                                        @elseif($sebayatlist->application_status == 'pending')
+                                                            <form action="{{ route('admin.accept', ['user_id' => urlencode($sebayatlist->user_id)]) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT') <!-- Specify the method as PUT -->
+                                                                <button type="submit" class="btn btn-success">Accept</button>
+                                                            </form>
+                                                            <form action="{{ route('admin.reject', ['user_id' => urlencode($sebayatlist->user_id)]) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT') <!-- Specify the method as PUT -->
+                                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                                            </form>
+                                                        @endif
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <a href="{{ route('admin.viewsebayat', ['user_id' => urlencode($sebayatlist->user_id)]) }}" class="btn btn-success"><i class="fas fa-eye"></i></a> | 
+                                                        {{-- <a href="{{url('admin/editsebayat/'.$sebayatlist->user_id)}}"><i class="fa fa-edit"></i></a> |  --}}
+                                                        <a href="{{url('admin/dltsebayat/'.$sebayatlist->user_id)}}" class="btn btn-danger" onClick="return confirm('Are you sure to delete ?');"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                                                 </tr>
                                              
                                                 @endforeach
@@ -110,6 +138,8 @@
                         </div>
                     </div>
                     <!-- End Row -->
+
+                  
 
 @endsection
 
@@ -132,5 +162,16 @@
 
     <!-- INTERNAL Select2 js -->
     <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+    <script>
+        // Assuming you have some way to identify the user, such as a data attribute or an id.
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function () {
+                // Set user_id based on the button or other context
+                const userId = this.getAttribute('data-user-id');
+                document.getElementById('user_id').value = userId;
+            });
+        });
+    </script>
+    
 
 @endsection

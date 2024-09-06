@@ -9,7 +9,14 @@ class Bankdetail extends Model
 {
     use HasFactory;
     protected $table = 'bankdetails';
-    protected $fillable = ['userid', 'bankname','branchname','ifsccode','accname','accnumber']; 
+    protected $fillable = [
+        'user_id',
+        'bankname',
+        'branchname',
+        'ifsccode',
+        'accname',
+        'accnumber',
+    ];
 
     public function user()
     {

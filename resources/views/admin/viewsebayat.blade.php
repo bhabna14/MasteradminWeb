@@ -203,75 +203,34 @@
 														</div>
 													</div>
                                                 </div>
-												<div class="form-group ">
-                                                
-                                                    <div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Type of Seba</label>
+												@if(empty($userinfo->death_date))
+													<!-- Show the form if death_date is empty -->
+													<form id="deathDateForm" action="{{ route('admin.addDeathDate', ['user_id' => urlencode($userinfo->user_id)]) }}" method="POST">
+														@csrf
+														<div class="form-group">
+															<label for="death_date">Death Date</label>
+															<input type="date" class="form-control" name="death_date" id="death_date" required>
 														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" name="seba" value="{{$userinfo->seba}}" readonly>
-														</div>
-													</div>
-                                                </div>
-												<div class="form-group ">
+														<button type="submit" class="btn btn-primary">Submit</button>
+													</form>
+												@else
+													<!-- Show the death date if it exists -->
+													
+													<div class="form-group ">
 
-                                                    <div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Bedha Seba</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" name="bedhaseba" value="{{$userinfo->bedhaseba}}" readonly>
+														<div class="row row-sm">
+															<div class="col-md-3">
+																<label class="form-label">Death Date</label>
+															</div>
+															<div class="col-md-9">
+																<input type="text" class="form-control" name="templeid" value="{{$userinfo->death_date}}" readonly>
+															</div>
 														</div>
 													</div>
-                                                    
-												</div>
-											<div class="row">
-											@if($userinfo->application_status == "approved")
-											<div class="col-md-3">
-												<div class="form-group">
-														<!-- <button class="btn btn-primary add_item_btn" id="adddoc">Add More</button> -->
-														<button class="btn btn-success"> Approved</button>
-												</div>
-																			
-											</div>
-											@elseif($userinfo->application_status == "rejected")
-											<div class="col-md-3">
-												<div class="form-group">
-														<!-- <button class="btn btn-primary add_item_btn" id="adddoc">Add More</button> -->
-														<button class="btn btn-primary"> Rejected</button>
-												</div>
-																			
-											</div>
+												@endif
+
+												
 											
-											@else
-											<form class="form-horizontal" action="{{ url('/admin/approve/'.$userinfo->id) }}" method="post" enctype="multipart/form-data">
-													@csrf
-													@method('PUT')
-												
-													<div class="col-md-3">
-														<div class="form-group">
-																<!-- <button class="btn btn-primary add_item_btn" id="adddoc">Add More</button> -->
-																<input  type="submit" class="btn btn-primary" value="Approve">
-														</div>
-																					
-													</div>
-											</form>
-											<form class="form-horizontal" action="{{ url('/admin/reject/'.$userinfo->id) }}" method="post" enctype="multipart/form-data">
-												@csrf
-												@method('PUT')
-
-													<div class="col-md-3">
-														<div class="form-group">
-																<!-- <button class="btn btn-primary add_item_btn" id="adddoc">Add More</button> -->
-																<input type="submit" class="btn btn-primary" value="Reject">
-														</div>
-																					
-													</div>
-												
-											</form>
-											@endif
-											</div>
 										</div>
 									</div>
 								</div>

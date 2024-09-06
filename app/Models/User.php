@@ -25,7 +25,20 @@ class User extends Authenticatable
         
     // ];
     protected $fillable = [
-        'userid','first_name','last_name','phonenumber', 'password'
+        'user_id',
+        'first_name',
+        'last_name',
+        'phonenumber',
+        'email',
+        'dob', // Adding dob to the fillable list
+        'bloodgrp', // Adding bloodgrp to the fillable list
+        'qualification', // Adding qualification to the fillable list
+        'healthcard',
+        'templeid', // Adding templeid to the fillable list
+        'userphoto', // Adding userphoto to the fillable list
+        'datejoin', 
+        'death_date',
+        'status'// Adding datejoin to the fillable list
     ];
     protected $dates = ['approved_date'];
     /**

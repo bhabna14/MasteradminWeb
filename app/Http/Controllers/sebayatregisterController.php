@@ -11,6 +11,8 @@ use App\Models\IdcardDetail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\SebayatFamily;
+use App\Models\SocialMedia;
 use DB;
 
 
@@ -18,15 +20,35 @@ class sebayatregisterController extends Controller
 {
     //
     public function sebayatregister(){
-        return view('sebayatregister');
+        return view('admin/sebayatregister');
     }
     public function sebayatlist(){
-        $sebayatlists = User::where('status', 'active')->get();
-        return view('sebayatlist',compact('sebayatlists'));
+        $sebayatlists = User::all();
+        return view('admin/sebayatlist',compact('sebayatlists'));
 
         
     }
-    
+    public function addDeathDate(Request $request, $user_id)
+    {
+        // Validate the request input
+        $request->validate([
+            'death_date' => 'required|date',
+        ]);
+
+        // Find the user by the user_id and update the status to 'deactivated'
+        $user = User::where('user_id', $user_id)->first();
+
+        if ($user) {
+            $user->update([
+                'status' => 'deactivated',
+                'death_date' => $request->input('death_date') // Assuming you have a 'death_date' column in the users table
+            ]);
+
+            return redirect()->back()->with('success', 'Death date added and status updated successfully.');
+        }
+
+        return redirect()->back()->with('error', 'User not found.');
+    }
     public function saveregister(Request $request){
 
         $request->validate([
@@ -171,45 +193,67 @@ class sebayatregisterController extends Controller
 
         return redirect()->back()->with('success', 'Data saved successfully.');
     }
-    public function editsebayat($userid){
+    public function editsebayat($user_id){
         // dd("hi");
-        $userinfo = User::where('userid', $userid)->first();
-        $bankinfo = Bankdetail::where('userid', $userid)->first();
-        $childinfos = Childrendetail::where('userid', $userid)
-                                    ->where('status','active')->get();
-        $iddetails = IdcardDetail::where('userid', $userid) ->where('status','active')->get();
-        $address = Addressdetail::where('userid', $userid)->first();
-        $bankinfo = Bankdetail::where('userid', $userid)->first();
+        // $userinfo = User::where('user_id', $user_id)->first();
+        // $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        // $childinfos = Childrendetail::where('user_id', $user_id)
+        //                             ->where('status','active')->get();
+        // $iddetails = IdcardDetail::where('user_id', $user_id) ->where('status','active')->get();
+        // $address = Addressdetail::where('user_id', $user_id)->first();
+        // $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+
+        $userinfo = User::where('user_id', $user_id)->first();
+        dd($userinfo);
+        $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        $childinfos = Childrendetail::where('user_id', $user_id)
+                                            ->where('status','active')->get();
+        $iddetails = IdcardDetail::where('user_id', $user_id) ->where('status','active')->get();
+        $address = Addressdetail::where('user_id', $user_id)->first();
+        $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        $familyinfo = SebayatFamily::where('user_id', $user_id)->first();
+        $socialmedia = SocialMedia::where('user_id', $user_id)->first();
 
        
-        return view('editsebayat',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo'));
+        return view('admin/editsebayat',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo','familyinfo','socialmedia'));
     }
-    public function viewsebayat($userid){
+    public function viewsebayat($user_id){
     
-        $userinfo = User::where('userid', $userid)->first();
-        $bankinfo = Bankdetail::where('userid', $userid)->first();
-        $childinfos = Childrendetail::where('userid', $userid)->get();
-        $iddetails = IdcardDetail::where('userid', $userid)->get();
-        $address = Addressdetail::where('userid', $userid)->first();
-        $bankinfo = Bankdetail::where('userid', $userid)->first();
+        $user_id = urldecode($user_id); // Decode URL-encoded user_id
+        // dd($user_id); // Debug the user_id
+         $userinfo = User::where('user_id', $user_id)->first();
+         // dd($userinfo); // Check the result of the query
+        $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        $childinfos = Childrendetail::where('user_id', $user_id)
+                                            ->where('status','active')->get();
+        $iddetails = IdcardDetail::where('user_id', $user_id) ->where('status','active')->get();
+        $address = Addressdetail::where('user_id', $user_id)->first();
+        $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        $familyinfo = SebayatFamily::where('user_id', $user_id)->first();
+        $socialmedia = SocialMedia::where('user_id', $user_id)->first();
 
        
-        return view('viewsebayat',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo'));
+        return view('admin/viewsebayat',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo','familyinfo','socialmedia'));
 
     }
-    public function approve(Request $request,$id){
-        $userdata = User::findOrFail($id);
-        $userdata->approved_date = now();
-        $userdata->application_status = "approved";
-        $userdata->update();
-        return redirect('admin/sebayatlist')->with('success', 'User approved successfully');
+    public function approve(Request $request, $user_id)
+    {
+        // Update the status to 'approved'
+        User::where('user_id', $user_id)
+            ->update(['application_status' => 'approved']);
+        
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Application approved successfully.');
     }
-    public function reject(Request $request,$id){
-        $userdata = User::findOrFail($id);
-        $userdata->approved_date = now();
-        $userdata->application_status = "rejected";
-        $userdata->update();
-        return redirect('admin/sebayatlist')->with('success', 'User Updated successfully');
+
+    public function reject(Request $request, $user_id)
+    {
+        // Update the status to 'rejected'
+        User::where('user_id', $user_id)
+            ->update(['application_status' => 'pending']);
+        
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Application rejected successfully.');
     }
     public function childupdate(Request $request,$id){
         $childdata = Childrendetail::find($id);
