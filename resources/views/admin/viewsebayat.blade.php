@@ -234,67 +234,121 @@
 										</div>
 									</div>
 								</div>
-								<div class="main-content-body  tab-pane border-top-0" id="family">
+								<div class="main-content-body tab-pane border-top-0" id="family">
 									<div class="card">
 										<div class="card-body border-0">
-										    <div class="mb-4 main-content-label">About Family Details</div>
-												<div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Father's Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->fathername}}" >
-														</div>
+											<div class="mb-4 main-content-label">About Family Details</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Father's Name</label>
 													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Mother's Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->mothername}}" >
-														</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->fathername ?? '' }}" readonly>
 													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Marital Status</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->marital}}" >
-														</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Father's Photo</label>
 													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Spouse Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->spouse}}" >
-														</div>
+													<div class="col-md-9">
+														@if($familyinfo->fatherphoto)
+															<img src="{{ asset('storage/' . $familyinfo->fatherphoto) }}" alt="Father's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
 													</div>
-                                                </div>
-
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Children Name</label>
-														</div>
-														<div class="col-md-9">
-                                                            @foreach($childinfos as $childinfo)
-                                                                <li> {{$childinfo->childrenname}}</li>
-																
-                                                            @endforeach
-                                                        </div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Mother's Name</label>
 													</div>
-                                                </div>
-                                            </div>
-									    </div>
-								    </div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->mothername ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Mother's Photo</label>
+													</div>
+													<div class="col-md-9">
+														@if($familyinfo->motherphoto)
+															<img src="{{ asset('storage/' . $familyinfo->motherphoto) }}" alt="Mother's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Marital Status</label>
+													</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->marital ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Spouse Name</label>
+													</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->spouse ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Spouse Photo</label>
+													</div>
+													<div class="col-md-9">
+														@if($familyinfo->spousephoto)
+															<img src="{{ asset('storage/' . $familyinfo->spousephoto) }}" alt="Spouse's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Children</label>
+													</div>
+													<div class="col-md-9">
+														@if($childinfos->isEmpty())
+															<p>No children information available</p>
+														@else
+															@foreach($childinfos as $childinfo)
+																<div class="mb-2">
+																	<h5>{{ $childinfo->childrenname }}</h5>
+																	<p>Date of Birth: {{ $childinfo->dob }}</p>
+																	<p>Gender: {{ $childinfo->gender }}</p>
+																	@if($childinfo->photo)
+																		<img src="{{ asset('storage/' . $childinfo->photo) }}" alt="Child's Photo" class="img-thumbnail" style="max-width: 150px;">
+																	@else
+																		<p>No photo available</p>
+																	@endif
+																</div>
+															@endforeach
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
 								<div class="main-content-body  border tab-pane border-top-0" id="gallery">
 									<div class="card-body border">
                                         @foreach($iddetails as $iddetail)
