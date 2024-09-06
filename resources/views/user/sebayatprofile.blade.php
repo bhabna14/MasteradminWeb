@@ -75,7 +75,8 @@
 										<a class="nav-link  mb-2 mt-2" data-bs-toggle="tab" href="#friends">Address</a>
 										<a class="nav-link  mb-2 mt-2" data-bs-toggle="tab" href="#settings">Bank Details
 											</a>
-
+											<a class="nav-link  mb-2 mt-2" data-bs-toggle="tab" href="#social-media">Social Media
+											</a>
 											{{-- <a class="nav-link  mb-2 mt-2 btn btn-primary"  href="{{url('admin/editsebayat/'.$userinfo->userid)}}" style="margin-left: 267px;">Edit Profile
 											</a> --}}
 									</nav>
@@ -230,108 +231,154 @@
 										</div>
 									</div>
 								</div>
-								<div class="main-content-body  tab-pane border-top-0" id="family">
+								<div class="main-content-body tab-pane border-top-0" id="family">
 									<div class="card">
 										<div class="card-body border-0">
-										    <div class="mb-4 main-content-label">About Family Details</div>
-												<div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Father's Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->fathername}}" >
-														</div>
+											<div class="mb-4 main-content-label">About Family Details</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Father's Name</label>
 													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Mother's Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->mothername}}" >
-														</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->fathername ?? '' }}" readonly>
 													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Marital Status</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->marital}}" >
-														</div>
-													</div>
-                                                </div>
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Spouse Name</label>
-														</div>
-														<div class="col-md-9">
-															<input type="text" class="form-control" value="{{$userinfo->spouse}}" >
-														</div>
-													</div>
-                                                </div>
-
-                                                <div class="form-group ">
-													<div class="row row-sm">
-														<div class="col-md-3">
-															<label class="form-label">Children Name</label>
-														</div>
-														<div class="col-md-9">
-                                                            @foreach($childinfos as $childinfo)
-                                                                <li> {{$childinfo->childrenname}}</li>
-																
-                                                            @endforeach
-                                                        </div>
-													</div>
-                                                </div>
-                                            </div>
-									    </div>
-								    </div>
-								<div class="main-content-body  border tab-pane border-top-0" id="gallery">
-									<div class="card-body border">
-                                        @foreach($iddetails as $iddetail)
-										<div class="masonry row">
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <label class="form-label">ID Proof Name:</label>
-    
-                                                    </div>
-                                                    <div class="col-md-9">
-                                                        <label class="form-label">{{$iddetail->idproof}}</label>
-    
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <label class="form-label">{{$iddetail->idproof}} Number:</label>
-    
-                                                    </div>
-                                                    <div class="col-md-7">
-                                                        <label class="form-label">{{$iddetail->idnumber}}</label>
-    
-                                                    </div>
-                                                </div>
-                                            </div>
-											<div class="col-xl-3 col-lg-4 col-sm-6">
-												<div class="brick">
-													<a href="{{asset($iddetail->uploadoc)}}" class="js-img-viewer"
-														data-caption="IMAGE-01" data-id="lion" download>
-														<img src="{{ asset($iddetail->uploadoc) }}" alt="" />
-													</a>
-													{{-- <a href="{{ route('download.user.image') }}">Download User Image as PDF</a> --}}
 												</div>
 											</div>
-											
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Father's Photo</label>
+													</div>
+													<div class="col-md-9">
+														@if($familyinfo->fatherphoto)
+															<img src="{{ asset('storage/' . $familyinfo->fatherphoto) }}" alt="Father's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Mother's Name</label>
+													</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->mothername ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Mother's Photo</label>
+													</div>
+													<div class="col-md-9">
+														@if($familyinfo->motherphoto)
+															<img src="{{ asset('storage/' . $familyinfo->motherphoto) }}" alt="Mother's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Marital Status</label>
+													</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->marital ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Spouse Name</label>
+													</div>
+													<div class="col-md-9">
+														<input type="text" class="form-control" value="{{ $familyinfo->spouse ?? '' }}" readonly>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Spouse Photo</label>
+													</div>
+													<div class="col-md-9">
+														@if($familyinfo->spousephoto)
+															<img src="{{ asset('storage/' . $familyinfo->spousephoto) }}" alt="Spouse's Photo" class="img-thumbnail" style="max-width: 200px;">
+														@else
+															<p>No photo available</p>
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="row row-sm">
+													<div class="col-md-3">
+														<label class="form-label">Children</label>
+													</div>
+													<div class="col-md-9">
+														@if($childinfos->isEmpty())
+															<p>No children information available</p>
+														@else
+															@foreach($childinfos as $childinfo)
+																<div class="mb-2">
+																	<h5>Children Name :{{ $childinfo->childrenname }}</h5>
+																	<p>Date of Birth: {{ $childinfo->dob }}</p>
+																	<p>Gender: {{ $childinfo->gender }}</p>
+																	@if($childinfo->childphoto)
+																		<img src="{{ asset('uploads/children/' . $childinfo->childphoto) }}" alt="Child's Photo" class="img-thumbnail" style="max-width: 150px;">
+																	@else
+																		<p>No photo available</p>
+																	@endif
+																</div>
+															@endforeach
+														@endif
+													</div>
+												</div>
+											</div>
 										</div>
-                                        @endforeach
-                                        
+									</div>
+								</div>
+								<div class="main-content-body border tab-pane border-top-0" id="gallery">
+									<div class="card-body border">
+										@foreach($iddetails as $iddetail)
+											<div class="masonry row mb-4">
+												<div class="col-md-6">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">ID Proof Name:</label>
+														</div>
+														<div class="col-md-9">
+															<label class="form-label">{{ $iddetail->idproof }}</label>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">ID Proof Number:</label>
+														</div>
+														<div class="col-md-7">
+															<label class="form-label">{{ $iddetail->idnumber }}</label>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-3 col-lg-4 col-sm-6">
+													<div class="brick">
+														<a href="{{ asset('uploads/id_docs/'.$iddetail->uploadoc) }}" class="js-img-viewer"
+														   data-caption="IMAGE-01" data-id="lion" download>
+															<img src="{{ asset('uploads/id_docs/'.$iddetail->uploadoc) }}" alt="" class="img-thumbnail" style="max-width: 200px;"/>
+														</a>
+													</div>
+												</div>
+											</div>
+										@endforeach
 									</div>
 								</div>
 								<div class="main-content-body tab-pane border-top-0" id="friends">
@@ -390,6 +437,67 @@
                                                     </div>
                                                 </div>
                                              </div>
+										</div>
+									</div>
+								</div>
+								<div class="main-content-body border tab-pane border-top-0" id="social-media">
+									<div class="card">
+										<div class="card-body border">
+											@if($socialmedia)
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">Facebook:</label>
+														</div>
+														<div class="col-md-9">
+															<a href="{{ $socialmedia->facebookurl }}" target="_blank">{{ $socialmedia->facebookurl }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">Twitter:</label>
+														</div>
+														<div class="col-md-9">
+															<a href="{{ $socialmedia->twitterurl }}" target="_blank">{{ $socialmedia->twitterurl }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">Instagram:</label>
+														</div>
+														<div class="col-md-9">
+															<a href="{{ $socialmedia->instagramurl }}" target="_blank">{{ $socialmedia->instagramurl }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">LinkedIn:</label>
+														</div>
+														<div class="col-md-9">
+															<a href="{{ $socialmedia->linkedinurl }}" target="_blank">{{ $socialmedia->linkedinurl }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-3">
+															<label class="form-label">YouTube:</label>
+														</div>
+														<div class="col-md-9">
+															<a href="{{ $socialmedia->youtubeurl }}" target="_blank">{{ $socialmedia->youtubeurl }}</a>
+														</div>
+													</div>
+												</div>
+												<!-- Add more social media fields as needed -->
+											@else
+												<p>No social media details available.</p>
+											@endif
 										</div>
 									</div>
 								</div>

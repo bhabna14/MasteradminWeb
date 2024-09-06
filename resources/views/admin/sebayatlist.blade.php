@@ -74,7 +74,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="media-text">
-                                                                <a href="{{url('admin/viewsebayat/'.$sebayatlist->user_id)}}" class="title">{{ $sebayatlist->first_name}} {{ $sebayatlist->last_name }}</a>
+                                                                <a href="{{url('admin/viewsebayat/'.urlencode($sebayatlist->user_id))}}" class="title">{{ $sebayatlist->first_name}} {{ $sebayatlist->last_name }}</a>
                                                                 <span class="small text">{{ $sebayatlist->email }}</span>
                                                             </div>
                                                         </div>

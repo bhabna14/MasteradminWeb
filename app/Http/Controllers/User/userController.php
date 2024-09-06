@@ -476,13 +476,20 @@ public function updateuserinfo(Request $request, $user_id)
     
         $userinfo = User::where('user_id', $user_id)->first();
         $bankinfo = Bankdetail::where('user_id', $user_id)->first();
-        $childinfos = Childrendetail::where('user_id', $user_id)->get();
-        $iddetails = IdcardDetail::where('user_id', $user_id)->get();
+        $childinfos = Childrendetail::where('user_id', $user_id)
+                                            ->where('status','active')->get();
+        $iddetails = IdcardDetail::where('user_id', $user_id)->where('status','active')->get();
         $address = Addressdetail::where('user_id', $user_id)->first();
         $bankinfo = Bankdetail::where('user_id', $user_id)->first();
+        $familyinfo = SebayatFamily::where('user_id', $user_id)->first();
+        $socialmedia = SocialMedia::where('user_id', $user_id)->first();
+        $typeofsebas = TypeOfSeba::where('user_id', $user_id)->where('status','active')->get();
+        
+               
+        return view('user/sebayatprofile',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo','familyinfo','socialmedia','typeofsebas'));
 
        
-        return view('user/sebayatprofile',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo'));
+        // return view('user/sebayatprofile',compact('userinfo','bankinfo','childinfos','iddetails','address','bankinfo','familyinfo'));
 
     }
     public function downloadUserImage(Request $request)
